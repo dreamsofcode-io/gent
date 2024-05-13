@@ -16,7 +16,7 @@ func Generate(ctx context.Context) (string, error) {
       contents. The message should convey why something was changed and not what
       changed. Use the well known format that has the prefix chore, fix, etc.
 
-      Only include changed to source files for the programming language and any changes to their package management file. Exclude
+      Only include changes to source files for the programming languages, shell configurations files, documentation such as readme and other .mds, and any changes to package management file. Exclude
       any lock or sum files.
 
       Do not use markdown format for the output.
