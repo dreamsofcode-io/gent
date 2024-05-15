@@ -1,0 +1,34 @@
+tools: gitdiff, gitcommit, sys.abort, sys.prompt
+description: Commits any staged changes with a git commit message
+
+Perform the following actions in order:-
+1. Create well formed git commit message based of off the currently staged file
+contents. The message should convey why something was changed and not what
+changed. Use the well known format that has the prefix chore, fix, etc.
+
+Only include changes to source files for the programming languages, shell configurations files, documentation such as readme and other .mds, and any changes to package management file. Exclude
+any lock or sum files.
+
+Do not use markdown format for the output.
+
+If there are no changes abort.
+
+2. Confirm with the user whether or not the suggested message is acceptable.
+Ask them with a simple Y/n prompt. If the user responds with anything other than a variation of yes, such as 'Y', or 'y', then abort.
+
+3. Commit their changes for them using the git_commit tool, passing in the generated message. Escape any quotes in the message.
+
+---
+name: gitdiff
+description: Obtains the currently staged diff from git
+
+#!/bin/sh
+
+git diff --staged
+
+---
+name: gitcommit
+args: message: The git commit message
+
+#!/bin/sh
+git commit -m "$message"
