@@ -1,26 +1,30 @@
+description: Tool to generate a git commit message and commit it if it's acceptable
 tools: gitdiff, gitcommit, sys.abort, sys.prompt
-description: Commits any staged changes with a git commit message
 
 Perform the following actions in order:-
-1. Create well formed git commit message based of off the currently staged file
+
+1. Create a well formed git commit message based of off the currently staged file
 contents. The message should convey why something was changed and not what
 changed. Use the well known format that has the prefix chore, fix, etc.
-
-Only include changes to source files for the programming languages, shell configurations files, documentation such as readme and other .mds, and any changes to package management file. Exclude
-any lock or sum files.
-
-Do not use markdown format for the output.
-
-If there are no changes abort.
+Only include changes to source files for the programming languages,
+shell configurations files, documentation such as readme and other .mds,
+and any changes to package management file. Exclude any lock or sum files.
+Do not use markdown format for the output. If there are no changes then abort,
+otherwise continue to the next step.
 
 2. Confirm with the user whether or not the suggested message is acceptable.
-Ask them with a simple Y/n prompt. If the user responds with anything other than a variation of yes, such as 'Y', or 'y', then abort.
+Ask them with a simple Y/n prompt.
+If the user responds with anything other than a
+variation of yes, such as 'Y', or 'y', then abort.
 
-3. Commit their changes for them using the git_commit tool, passing in the generated message. Escape any quotes in the message.
+3. Commit their changes using the gitcommit tool, passing in the generated message.
+Escape any quotes in the message. Make sure to use the full commit message.
+
+4. Show the user the output from the git commit command.
 
 ---
 name: gitdiff
-description: Obtains the currently staged diff from git
+description: Obtain the git diff of the staged changes
 
 #!/bin/sh
 
@@ -28,6 +32,7 @@ git diff --staged
 
 ---
 name: gitcommit
+description: This tool commits the changes to git
 args: message: The git commit message
 
 #!/bin/sh
