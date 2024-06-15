@@ -14,6 +14,8 @@ import (
 	"github.com/dreamsofcode-io/gent/internal/message"
 )
 
+var cursed bool
+
 // commitCmd represents the commit command
 var commitCmd = &cobra.Command{
 	Use:   "commit",
@@ -44,7 +46,7 @@ var commitCmd = &cobra.Command{
 			return fmt.Errorf("Git worktree is clean, no need to run gent")
 		}
 
-		msg, err := message.Generate(cmd.Context())
+		msg, err := message.Generate(cmd.Context(), cursed)
 		if err != nil {
 			fmt.Println("failure:", msg)
 			return fmt.Errorf("failed to generate a message: %w", err)
@@ -65,5 +67,6 @@ var commitCmd = &cobra.Command{
 }
 
 func init() {
+	commitCmd.Flags().BoolVar(&cursed, "cursed", false, "used to generate commits with only emojis")
 	rootCmd.AddCommand(commitCmd)
 }
