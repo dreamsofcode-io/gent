@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"strings"
 
 	"github.com/go-git/go-git/v5"
 	"github.com/spf13/cobra"
@@ -41,31 +40,13 @@ var commitCmd = &cobra.Command{
 			return fmt.Errorf("failed to get git status, %w", err)
 		}
 
-		if !status.IsClean() {
+		if status.IsClean() {
 			return fmt.Errorf("Git worktree is clean, no need to run gent")
 		}
 
 		msg, err := message.Generate(cmd.Context())
 		if err != nil {
 			return fmt.Errorf("failed to generate a message: %w", err)
-		}
-
-		fmt.Printf("Generated Commit Message:\n\n")
-
-		fmt.Println(msg)
-
-		fmt.Printf("\nProceed with commit message? (Y/n): ")
-
-		var confirmation string
-
-		_, err = fmt.Scanln(&confirmation)
-		if err != nil {
-			return fmt.Errorf("failed to scan input: %w", err)
-		}
-
-		if confirmation != "" && strings.ToLower(confirmation) != "y" {
-			fmt.Println("Aborting commit. No changes were made.")
-			return nil
 		}
 
 		command := exec.Command("git", "commit", "-em", msg)
