@@ -46,6 +46,7 @@ var commitCmd = &cobra.Command{
 
 		msg, err := message.Generate(cmd.Context())
 		if err != nil {
+			fmt.Println("failure:", msg)
 			return fmt.Errorf("failed to generate a message: %w", err)
 		}
 
