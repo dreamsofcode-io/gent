@@ -21,6 +21,9 @@ func Generate(ctx context.Context) (string, error) {
 
       Do not use markdown format for the output.
 
+			For the first line of the commit message, this must be constrained to 50 characters as a
+			maximum.
+
       If there are no changes abort.`,
 		},
 		{
