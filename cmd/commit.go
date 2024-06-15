@@ -26,17 +26,24 @@ var commitCmd = &cobra.Command{
 			return fmt.Errorf("failed to get current directory: %w", err)
 		}
 
-		_, err = git.PlainOpen(directory)
+		r, err := git.PlainOpen(directory)
 		if err != nil {
 			return fmt.Errorf("failed to open repository: %w", err)
 		}
 
-		/*
-			w, err := r.Worktree()
-			if err != nil {
-				return fmt.Errorf("failed to get worktree: %w", err)
-			}
-		*/
+		w, err := r.Worktree()
+		if err != nil {
+			return fmt.Errorf("failed to get worktree: %w", err)
+		}
+
+		status, err := w.Status()
+		if err != nil {
+			return fmt.Errorf("failed to get git status, %w", err)
+		}
+
+		if !status.IsClean() {
+			return fmt.Errorf("Git worktree is clean, no need to run gent")
+		}
 
 		msg, err := message.Generate(cmd.Context())
 		if err != nil {
@@ -61,21 +68,11 @@ var commitCmd = &cobra.Command{
 			return nil
 		}
 
-		/*
-			commit, err := w.Commit(msg, &git.CommitOptions{})
-			if err != nil {
-				return fmt.Errorf("failed to commit: %w", err)
-			}
+		command := exec.Command("git", "commit", "-em", msg)
+		command.Stdin = os.Stdin
+		command.Stdout = os.Stdout
 
-			obj, err := r.CommitObject(commit)
-			if err != nil {
-				return fmt.Errorf("failed to get commit obj: %w", err)
-			}
-
-			fmt.Println(obj)
-		*/
-
-		err = exec.Command("git", "commit", "-em", msg).Run()
+		err = command.Run()
 		if err != nil {
 			fmt.Fprintln(os.Stderr, "failed to start proc:", err)
 			return err
@@ -87,5 +84,4 @@ var commitCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(commitCmd)
-
 }
