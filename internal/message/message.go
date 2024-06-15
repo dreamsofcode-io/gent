@@ -14,7 +14,8 @@ func Generate(ctx context.Context) (string, error) {
 			Instructions: `
       Create well formed git commit message based of off the currently staged file
       contents. The message should convey why something was changed and not what
-      changed. Use the well known format that has the prefix chore, fix, etc.
+      changed. Use the well known format that has the prefix chore, fix, etc. Additionally
+			add in some emojis just for fun.
 
       Only include changes to source files for the programming languages, shell configurations files, documentation such as readme and other .mds, and any changes to package management file. Exclude
       any lock or sum files.
